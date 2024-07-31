@@ -64,3 +64,17 @@ function executeWork(employee: Director | Teacher): void {
     console.log(employee.workTeacherTasks());
   }
 }
+
+// Define a string literal type named Subjects
+type Subjects = 'Math' | 'History';
+
+// Define the teachClass function
+function teachClass(todayClass: Subjects): string {
+  if (todayClass === 'Math') {
+    return 'Teaching Math';
+  } else if (todayClass === 'History') {
+    return 'Teaching History';
+  }
+  // This should never be reached due to the type constraint
+  throw new Error('Invalid subject');
+}
