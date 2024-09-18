@@ -29,7 +29,9 @@ function countStudents(path) {
   });
   console.log(`Number of students: ${totalStudents}`);
   for (const field in studentsByField) {
-    console.log(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentsByField[field].join(', ')}`);
+    if (Object.prototype.hasOwnProperty.call(studentsByField, field)) {
+      console.log(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentsByField[field].join(', ')}`);
+    }
   }
 }
 module.exports = countStudents;
