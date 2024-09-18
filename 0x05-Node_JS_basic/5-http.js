@@ -39,7 +39,7 @@ async function countStudents(path) {
 const app = http.createServer(async (req, res) => {
   if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello Holberton School!\n');
+    res.end('Hello Holberton School!');
   } if (req.url === '/students') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.write('This is the list of our students\n');
@@ -48,7 +48,7 @@ const app = http.createServer(async (req, res) => {
       const result = await countStudents(dbFilePath);
       res.end(result);
     } catch (err) {
-      res.end(`Error: ${err.message}\n`);
+      res.end(`Error: ${err.message}`);
     }
   }
 });
