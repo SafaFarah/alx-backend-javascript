@@ -60,5 +60,17 @@ describe('API tests', () => {
         done();
       });
     });
+
+    it('should return 400 if userName is not provided', (done) => {
+      request.post({
+        url: `${baseUrl}/login`,
+        json: {},
+      }, (error, response) => {
+        expect(response.statusCode).to.equal(400);
+        expect(response.body).to.equal('Missing userName');
+        done();
+      });
+    });
   });
 });
+
