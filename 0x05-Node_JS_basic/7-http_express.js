@@ -49,7 +49,7 @@ app.get('/students', async (req, res) => {
     const result = await countStudents(dbFilePath);
     res.end(result);
   } catch (err) {
-    res.status(500).send(`Error: ${err.message}\n`);
+    res.status(500).send(err.message);
   }
 });
 app.listen(port, () => {
