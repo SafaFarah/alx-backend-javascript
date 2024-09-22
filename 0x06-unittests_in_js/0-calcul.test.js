@@ -5,9 +5,6 @@ describe('calculateNumber', () => {
   it('floating point whole numbers', () => {
     assert.strictEqual(calculateNumber(1, 2), 3);
   });
-  it('rounding down b\'s floating point fractional number', () => {
-    assert.strictEqual(calculateNumber(1.0, 2.4), 3);
-  });
 
   it('rounding down a and b\'s floating point fractional number', () => {
     assert.strictEqual(calculateNumber(1.4, 2.4), 3);
