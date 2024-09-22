@@ -48,7 +48,7 @@ const app = http.createServer(async (req, res) => {
       const result = await countStudents(dbFilePath);
       res.end(result);
     } catch (err) {
-      res.end(`Error: ${err.message}`);
+      res.end(err.message);
     }
   }
 });
