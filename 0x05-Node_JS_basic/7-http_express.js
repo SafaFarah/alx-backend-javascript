@@ -4,11 +4,11 @@ const fs = require('fs').promises;
 const app = express();
 const port = 1245;
 
-async function countStudents(path) {
+async function countStudents(filePath) {
   try {
-    await fs.access(path);
-    const data = await fs.readFile(path, 'utf8');
-    const lines = data.split('\n').filter((line) => line.trim() !== '');
+    await fs.access(filePath);
+    const data = await fs.readFile(filePath, 'utf8');
+    const lines = data.split('\n').filter(line => line.trim() !== '');
     const [headers, ...rows] = lines;
     const headerArray = headers.split(',');
     const firstNameIndex = headerArray.indexOf('firstname');
@@ -16,8 +16,8 @@ async function countStudents(path) {
     const studentsByField = {};
     let totalStudents = 0;
 
-    rows.forEach((row) => {
-      const columns = row.split(',').map((cell) => cell.trim());
+    rows.forEach(row => {
+      const columns = row.split(',').map(cell => cell.trim());
       const firstName = columns[firstNameIndex];
       const field = columns[fieldIndex];
       if (firstName && field) {
@@ -30,12 +30,12 @@ async function countStudents(path) {
     });
 
     let result = `Number of students: ${totalStudents}\n`;
-    const fieldEntries = Object.entries(studentsByField);
-    fieldEntries.forEach(([field, names]) => {
+    Object.entries(studentsByField).forEach(([field, names]) => {
       result += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
     });
-    
+
     result = result.replace(/\n$/, '');
+
     return result;
   } catch (error) {
     throw new Error('Cannot load the database');
@@ -46,12 +46,20 @@ app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
-app.get('/students', (req, res) => {
-  countStudents(process.argv[2].toString()).then((output) => {
-    res.send(['This is the list of our students\n', output]);
-  }).catch(() => {
-    res.send('This is the list of our students\nCannot load the database');
-  });
+app.get('/students', async (req, res) => {
+  const dbFilePath = process.argv[2];
+  try {
+    let responseText = 'This is the list of our students\n';
+    const result = await countStudents(dbFilePath);
+    responseText += result;
+    res.end(responseText);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}\n`);
+  }
+});
+
+app.use((req, res) => {
+  res.status(404).send('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Error</title></head><body><pre>Cannot GET ' + req.url + '</pre></body></html>');
 });
 
 app.listen(port, () => {
