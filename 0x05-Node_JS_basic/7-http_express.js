@@ -28,30 +28,32 @@ async function countStudents(path) {
         studentsByField[field].push(firstName);
       }
     });
+
     let result = `Number of students: ${totalStudents}\n`;
     const fieldEntries = Object.entries(studentsByField);
     fieldEntries.forEach(([field, names]) => {
       result += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
     });
+    
     result = result.replace(/\n$/, '');
     return result;
   } catch (error) {
     throw new Error('Cannot load the database');
   }
 }
+
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
-app.get('/students', async (req, res) => {
-  res.write('This is the list of our students\n');
-  const dbFilePath = process.argv[2];
-  try {
-    const result = await countStudents(dbFilePath);
-    res.end(result);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
+
+app.get('/students', (req, res) => {
+  countStudents(process.argv[2].toString()).then((output) => {
+    res.send(['This is the list of our students\n', output]);
+  }).catch(() => {
+    res.send('This is the list of our students\nCannot load the database');
+  });
 });
+
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
