@@ -8,7 +8,7 @@ async function countStudents(filePath) {
   try {
     await fs.access(filePath);
     const data = await fs.readFile(filePath, 'utf8');
-    const lines = data.split('\n').filter(line => line.trim() !== '');
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
     const [headers, ...rows] = lines;
     const headerArray = headers.split(',');
     const firstNameIndex = headerArray.indexOf('firstname');
@@ -16,8 +16,8 @@ async function countStudents(filePath) {
     const studentsByField = {};
     let totalStudents = 0;
 
-    rows.forEach(row => {
-      const columns = row.split(',').map(cell => cell.trim());
+    rows.forEach((row) => {
+      const columns = row.split(',').map((cell) => cell.trim());
       const firstName = columns[firstNameIndex];
       const field = columns[fieldIndex];
       if (firstName && field) {
@@ -54,12 +54,8 @@ app.get('/students', async (req, res) => {
     responseText += result;
     res.end(responseText);
   } catch (err) {
-    res.status(500).send(`Error: ${err.message}\n`);
+    res.send('This is the list of our students\nCannot load the database');
   }
-});
-
-app.use((req, res) => {
-  res.status(404).send('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Error</title></head><body><pre>Cannot GET ' + req.url + '</pre></body></html>');
 });
 
 app.listen(port, () => {
